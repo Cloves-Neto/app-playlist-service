@@ -68,7 +68,7 @@ export function RemoveTracksModal({
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
             Selecione quais faixas você deseja desvincular do caderno{" "}
-            <span className="font-semibold text-foreground">"{playlist.nome}"</span>.
+            <span className="font-semibold text-foreground">&quot;{playlist.nome}&quot;</span>.
           </DialogDescription>
         </DialogHeader>
 

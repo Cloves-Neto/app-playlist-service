@@ -1,6 +1,7 @@
 ﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteMusicService } from "@/api/musics/delete";
 import { toast } from "sonner";
+import axios from "axios";
 
 const deleteService = new DeleteMusicService();
 
@@ -14,11 +15,12 @@ export function useDeleteMusic() {
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       toast.success(`"${variables.titulo}" removida.`);
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Erro ao excluir a música.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Erro ao excluir a música.";
       toast.error(message);
     },
   });

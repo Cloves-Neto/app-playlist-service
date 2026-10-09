@@ -48,7 +48,7 @@ export function MusicDeleteModal({ music, isOpen, onClose }: MusicDeleteModalPro
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
             Tem certeza de que deseja remover a faixa{" "}
-            <span className="font-semibold text-foreground">"{music.titulo}"</span> de{" "}
+            <span className="font-semibold text-foreground">&quot;{music.titulo}&quot;</span> de{" "}
             <span className="font-semibold text-foreground">{music.artista}</span>? Esta ação não pode ser desfeita.
           </DialogDescription>
         </DialogHeader>

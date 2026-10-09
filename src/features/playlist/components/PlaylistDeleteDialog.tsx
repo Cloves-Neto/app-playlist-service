@@ -46,7 +46,7 @@ export function PlaylistDeleteDialog({
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
             Tem certeza de que deseja excluir a playlist{" "}
-            <span className="font-semibold text-foreground">"{playlistName}"</span>? As músicas cadastradas permanecerão na sua biblioteca principal.
+            <span className="font-semibold text-foreground">&quot;{playlistName}&quot;</span>? As músicas cadastradas permanecerão na sua biblioteca principal.
           </DialogDescription>
         </DialogHeader>
 

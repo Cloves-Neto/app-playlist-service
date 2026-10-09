@@ -2,6 +2,7 @@
 import { EditMusicService } from "@/api/musics/edit";
 import { MusicRequest, MusicResponse } from "@/features/music/types/music.types";
 import { toast } from "sonner";
+import axios from "axios";
 
 const editService = new EditMusicService();
 
@@ -20,11 +21,12 @@ export function useEditMusic() {
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       toast.success(`"${data.titulo}" atualizada com sucesso!`);
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Erro ao atualizar a música.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Erro ao atualizar a música.";
       toast.error(message);
     },
   });

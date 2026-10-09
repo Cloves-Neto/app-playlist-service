@@ -1,6 +1,7 @@
 ﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RemoveMusicsPlaylistService } from "@/api/lists/remove-musics";
 import { toast } from "sonner";
+import axios from "axios";
 
 const removeMusicsService = new RemoveMusicsPlaylistService();
 
@@ -24,11 +25,12 @@ export function useRemoveTracksFromPlaylist() {
         } da playlist.`
       );
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Erro ao remover faixas da playlist.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Erro ao remover faixas da playlist.";
       toast.error(message);
     },
   });

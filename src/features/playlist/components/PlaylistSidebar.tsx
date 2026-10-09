@@ -7,7 +7,7 @@ import { usePlaylists } from "../hooks/usePlaylists";
 import { PlaylistNavItem } from "./micro/PlaylistNavItem";
 import { PlaylistCreateButton } from "./micro/PlaylistCreateButton";
 import { PlaylistCreateModal } from "./PlaylistCreateModal";
-import { Music2, FolderKanban, Library } from "lucide-react";
+import { Music2, Library } from "lucide-react";
 
 export function PlaylistSidebar() {
   const pathname = usePathname();

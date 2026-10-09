@@ -97,7 +97,7 @@ export function MusicFeed() {
                   Nenhuma faixa encontrada
                 </h4>
                 <p className="text-xs text-muted-foreground pt-1 max-w-sm mx-auto">
-                  Não encontramos músicas correspondentes ao termo "{searchQuery}".
+                  Não encontramos músicas correspondentes ao termo &quot;{searchQuery}&quot;.
                 </p>
               </div>
               <Button
@@ -142,11 +142,14 @@ export function MusicFeed() {
       )}
 
       {/* Modais */}
-      <MusicEditModal
-        music={editingMusic}
-        isOpen={!!editingMusic}
-        onClose={() => setEditingMusic(null)}
-      />
+      {editingMusic && (
+        <MusicEditModal
+          key={editingMusic.id}
+          music={editingMusic}
+          isOpen={true}
+          onClose={() => setEditingMusic(null)}
+        />
+      )}
 
       <MusicDeleteModal
         music={deletingMusic}

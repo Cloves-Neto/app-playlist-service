@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { QuickCaptureInput } from "./micro/QuickCaptureInput";
 import { ArtistInput } from "./micro/ArtistInput";
 import { AlbumInput } from "./micro/AlbumInput";
@@ -20,11 +20,27 @@ export function QuickCaptureBar() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    setAno(new Date().getFullYear());
-  }, []);
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const createMutation = useCreateMusic();
+
+  // Atalho de teclado 'N' para focar na captura rápida
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      if (
+        (e.key === "n" || e.key === "N") &&
+        activeTag !== "input" &&
+        activeTag !== "textarea" &&
+        !e.metaKey &&
+        !e.ctrlKey
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -78,13 +94,16 @@ export function QuickCaptureBar() {
             <Sparkles className="w-3.5 h-3.5 text-primary" />
             Captura Rápida de Faixas
           </span>
-          <span className="hidden sm:inline text-[10px] font-mono text-muted-foreground/70">
-            Pressione Enter para salvar instantaneamente
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline text-[10px] font-mono text-muted-foreground/70">
+              Pressione <kbd className="bg-muted px-1 rounded border border-border/60">N</kbd> para focar
+            </span>
+          </div>
         </div>
 
         {/* Input Principal do Título */}
         <QuickCaptureInput
+          ref={inputRef}
           value={titulo}
           onChange={(e) => {
             setTitulo(e.target.value);

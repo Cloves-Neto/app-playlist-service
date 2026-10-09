@@ -2,6 +2,7 @@
 import { DeletePlaylistService } from "@/api/lists/delete";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const deleteService = new DeletePlaylistService();
 
@@ -16,11 +17,12 @@ export function useDeletePlaylist() {
       toast.success(`Playlist "${listName}" excluída.`);
       router.push("/");
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Não foi possível excluir a playlist.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Não foi possível excluir a playlist.";
       toast.error(message);
     },
   });

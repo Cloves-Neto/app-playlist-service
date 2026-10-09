@@ -2,6 +2,7 @@
 import { CreateMusicService } from "@/api/musics/create";
 import { MusicRequest, MusicResponse } from "@/features/music/types/music.types";
 import { toast } from "sonner";
+import axios from "axios";
 
 const createService = new CreateMusicService();
 
@@ -14,11 +15,12 @@ export function useCreateMusic() {
       queryClient.invalidateQueries({ queryKey: ["musics"] });
       toast.success(`"${data.titulo}" anotada com sucesso!`);
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Não foi possível salvar a música.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Não foi possível salvar a música.";
       toast.error(message);
     },
   });

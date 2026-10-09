@@ -55,7 +55,7 @@ export function PlaylistDetailView({
           Playlist não encontrada
         </h4>
         <p className="text-xs text-muted-foreground">
-          Não foi possível encontrar a playlist "{playlistName}" na base de dados.
+          Não foi possível encontrar a playlist &quot;{playlistName}&quot; na base de dados.
         </p>
         <Link href="/">
           <Button variant="outline" size="sm" className="text-xs mt-2">
@@ -179,11 +179,14 @@ export function PlaylistDetailView({
         onClose={() => setIsRemoveTracksOpen(false)}
       />
 
-      <MusicEditModal
-        music={editingMusic}
-        isOpen={!!editingMusic}
-        onClose={() => setEditingMusic(null)}
-      />
+      {editingMusic && (
+        <MusicEditModal
+          key={editingMusic.id}
+          music={editingMusic}
+          isOpen={true}
+          onClose={() => setEditingMusic(null)}
+        />
+      )}
 
       <MusicDeleteModal
         music={deletingMusic}

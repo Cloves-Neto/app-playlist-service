@@ -2,6 +2,7 @@
 import { CreatePlaylistService } from "@/api/lists/create";
 import { Playlist, PlaylistRequest } from "../types/playlist.types";
 import { toast } from "sonner";
+import axios from "axios";
 
 const createService = new CreatePlaylistService();
 
@@ -14,11 +15,12 @@ export function useCreatePlaylist() {
       queryClient.invalidateQueries({ queryKey: ["playlists"] });
       toast.success(`Caderno "${data.nome}" criado com sucesso!`);
     },
-    onError: (err: any) => {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Não foi possível criar a playlist.";
+    onError: (err: unknown) => {
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.message || err.message
+        : err instanceof Error
+        ? err.message
+        : "Não foi possível criar a playlist.";
       toast.error(message);
     },
   });

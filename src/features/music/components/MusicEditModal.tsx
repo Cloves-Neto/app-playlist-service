@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,25 +23,14 @@ interface MusicEditModalProps {
 }
 
 export function MusicEditModal({ music, isOpen, onClose }: MusicEditModalProps) {
-  const [titulo, setTitulo] = useState("");
-  const [artista, setArtista] = useState("");
-  const [album, setAlbum] = useState("");
-  const [ano, setAno] = useState<number | string>("");
-  const [genero, setGenero] = useState("");
+  const [titulo, setTitulo] = useState(music?.titulo || "");
+  const [artista, setArtista] = useState(music?.artista || "");
+  const [album, setAlbum] = useState(music?.album || "");
+  const [ano, setAno] = useState<number | string>(music?.ano || 2024);
+  const [genero, setGenero] = useState(music?.genero || "");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const editMutation = useEditMusic();
-
-  useEffect(() => {
-    if (music) {
-      setTitulo(music.titulo);
-      setArtista(music.artista);
-      setAlbum(music.album);
-      setAno(music.ano);
-      setGenero(music.genero);
-      setErrors({});
-    }
-  }, [music, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
