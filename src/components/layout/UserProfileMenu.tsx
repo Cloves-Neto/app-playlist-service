@@ -5,12 +5,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User, Activity, Loader2, Sparkles } from "lucide-react";
+import { LogOut, User, Activity, Loader2 } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { useWorkspaceStore } from "@/stores/workspace.store";
 import { useQueryClient } from "@tanstack/react-query";
@@ -70,7 +69,7 @@ export function UserProfileMenu() {
         sideOffset={6}
         className="w-64 min-w-[240px] bg-card/95 backdrop-blur-md border-border/70 p-1.5 shadow-lg"
       >
-        <DropdownMenuLabel className="font-normal px-2 py-2">
+        <div className="px-2 py-2 select-none">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-primary/15 text-primary flex items-center justify-center font-bold text-xs shrink-0 border border-primary/25">
               {initials}
@@ -85,11 +84,11 @@ export function UserProfileMenu() {
               </span>
             </div>
           </div>
-        </DropdownMenuLabel>
+        </div>
 
         <DropdownMenuSeparator />
 
-        <div className="px-2.5 py-1.5 text-[11px] text-muted-foreground flex items-center justify-between">
+        <div className="px-2.5 py-1.5 text-[11px] text-muted-foreground flex items-center justify-between select-none">
           <div className="flex items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
             <span>API Spring Boot</span>
