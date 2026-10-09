@@ -10,6 +10,8 @@ export function usePlaylistByName(name: string, initialData?: Playlist) {
     queryFn: () => getByNameService.execute(name),
     initialData,
     enabled: !!name,
-    staleTime: 1000 * 60 * 2,
+    staleTime: 0, // Sempre revalida
+    refetchOnMount: "always", // Sempre que entrar na página dispara refresh automático
+    refetchOnWindowFocus: true, // Dispara ao alternar abas
   });
 }

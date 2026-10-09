@@ -32,9 +32,11 @@ export function AddTracksToPlaylistModal({
   const { data: allMusics, isLoading } = useMusics("");
   const addMutation = useAddTracksToPlaylist();
 
+  const tracks = playlist.musics || (playlist as any).musicas || [];
+
   const currentTrackIds = useMemo(() => {
-    return new Set((playlist.musics || []).map((m) => m.id));
-  }, [playlist.musics]);
+    return new Set(tracks.map((m: any) => m.id));
+  }, [tracks]);
 
   const availableMusics = useMemo(() => {
     if (!allMusics) return [];

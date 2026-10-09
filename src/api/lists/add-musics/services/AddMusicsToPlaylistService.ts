@@ -1,5 +1,5 @@
 ﻿import { httpClient } from "@/api/client/httpClient";
-import { MusicAdditionRequest, Playlist } from "@/features/playlist/types/playlist.types";
+import { MusicAdditionRequest, Playlist, normalizePlaylist } from "@/features/playlist/types/playlist.types";
 
 export class AddMusicsToPlaylistService {
   async execute(listName: string, payload: MusicAdditionRequest): Promise<Playlist> {
@@ -7,6 +7,6 @@ export class AddMusicsToPlaylistService {
       `/lists/${encodeURIComponent(listName)}/musics`,
       payload
     );
-    return response.data;
+    return normalizePlaylist(response.data);
   }
 }

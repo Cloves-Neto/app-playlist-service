@@ -8,6 +8,7 @@ export function usePlaylists() {
   return useQuery<Playlist[]>({
     queryKey: ["playlists"],
     queryFn: () => getAllService.execute(),
-    staleTime: 1000 * 60 * 2, // 2 minutos
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }

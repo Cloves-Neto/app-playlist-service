@@ -28,6 +28,8 @@ export function RemoveTracksModal({
   const [selectedMusicIds, setSelectedMusicIds] = useState<string[]>([]);
   const removeMutation = useRemoveTracksFromPlaylist();
 
+  const tracks = playlist.musics || (playlist as any).musicas || [];
+
   const toggleSelect = (id: string) => {
     setSelectedMusicIds((prev) =>
       prev.includes(id) ? prev.filter((mId) => mId !== id) : [...prev, id]
@@ -35,10 +37,10 @@ export function RemoveTracksModal({
   };
 
   const selectAll = () => {
-    if (selectedMusicIds.length === playlist.musics.length) {
+    if (selectedMusicIds.length === tracks.length) {
       setSelectedMusicIds([]);
     } else {
-      setSelectedMusicIds(playlist.musics.map((m) => m.id));
+      setSelectedMusicIds(tracks.map((m) => m.id));
     }
   };
 
@@ -75,13 +77,13 @@ export function RemoveTracksModal({
         <div className="space-y-3 py-2">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>{selectedMusicIds.length} faixas selecionadas</span>
-            {playlist.musics && playlist.musics.length > 0 && (
+            {tracks.length > 0 && (
               <button
                 type="button"
                 onClick={selectAll}
                 className="text-primary hover:underline cursor-pointer text-xs"
               >
-                {selectedMusicIds.length === playlist.musics.length
+                {selectedMusicIds.length === tracks.length
                   ? "Desmarcar todas"
                   : "Selecionar todas"}
               </button>
@@ -89,8 +91,8 @@ export function RemoveTracksModal({
           </div>
 
           <div className="max-h-56 overflow-y-auto space-y-1.5 rounded-lg border border-border/40 p-2 bg-muted/20">
-            {playlist.musics && playlist.musics.length > 0 ? (
-              playlist.musics.map((m) => {
+            {tracks.length > 0 ? (
+              tracks.map((m) => {
                 const isSelected = selectedMusicIds.includes(m.id);
                 return (
                   <div

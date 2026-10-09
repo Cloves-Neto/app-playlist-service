@@ -12,7 +12,8 @@ import { MusicEditModal } from "@/features/music/components/MusicEditModal";
 import { MusicDeleteModal } from "@/features/music/components/MusicDeleteModal";
 import { MusicResponse } from "@/features/music/types/music.types";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Trash2, ListMinus, Folder, Disc, AlertCircle, Plus } from "lucide-react";
+import { ArrowLeft, Trash2, ListMinus, Folder, Disc, AlertCircle, Plus, RefreshCw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PlaylistDetailViewProps {
   initialPlaylist?: Playlist;
@@ -23,10 +24,13 @@ export function PlaylistDetailView({
   initialPlaylist,
   playlistName,
 }: PlaylistDetailViewProps) {
-  const { data: playlist, isLoading, isError } = usePlaylistByName(
-    playlistName,
-    initialPlaylist
-  );
+  const {
+    data: playlist,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = usePlaylistByName(playlistName, initialPlaylist);
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isRemoveTracksOpen, setIsRemoveTracksOpen] = useState(false);
@@ -59,21 +63,32 @@ export function PlaylistDetailView({
         <p className="text-xs text-muted-foreground">
           Não foi possível encontrar a playlist &quot;{playlistName}&quot; na base de dados.
         </p>
-        <Link href="/">
-          <Button variant="outline" size="sm" className="text-xs mt-2">
-            Voltar para a biblioteca
+        <div className="flex items-center justify-center gap-2 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            className="text-xs gap-1.5"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Tentar recarregar
           </Button>
-        </Link>
+          <Link href="/">
+            <Button variant="outline" size="sm" className="text-xs">
+              Voltar para a biblioteca
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const tracks = playlist.musics || [];
+  const tracks = playlist.musics || (playlist as any).musicas || [];
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Botão de retorno */}
-      <div>
+      {/* Botão de retorno e Refresh */}
+      <div className="flex items-center justify-between">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
@@ -81,6 +96,17 @@ export function PlaylistDetailView({
           <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
           <span>Voltar para todas as notas</span>
         </Link>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => refetch()}
+          disabled={isFetching}
+          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground gap-1.5 cursor-pointer"
+        >
+          <RefreshCw className={cn("w-3 h-3", isFetching && "animate-spin text-primary")} />
+          <span>{isFetching ? "Atualizando..." : "Atualizar"}</span>
+        </Button>
       </div>
 
       {/* Cabeçalho da Playlist */}
@@ -145,9 +171,16 @@ export function PlaylistDetailView({
 
       {/* Grid de Faixas da Playlist */}
       <div className="space-y-3">
-        <h3 className="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">
-          Faixas neste caderno
-        </h3>
+        <div className="flex items-center justify-between px-1">
+          <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Faixas neste caderno
+          </h3>
+          {isFetching && !isLoading && (
+            <span className="text-[10px] text-muted-foreground animate-pulse">
+              Sincronizando faixas...
+            </span>
+          )}
+        </div>
 
         {tracks.length === 0 ? (
           <div className="bg-card/40 border border-dashed border-border/70 rounded-xl p-10 text-center space-y-3">
@@ -174,7 +207,7 @@ export function PlaylistDetailView({
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {tracks.map((music) => (
+            {tracks.map((music: MusicResponse) => (
               <MusicCard
                 key={music.id}
                 music={music}

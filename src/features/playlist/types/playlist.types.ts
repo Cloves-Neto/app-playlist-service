@@ -5,6 +5,7 @@ export interface Playlist {
   nome: string;
   descricao: string;
   musics: Music[];
+  musicas?: Music[];
 }
 
 export interface PlaylistRequest {
@@ -20,4 +21,14 @@ export interface MusicRemovalRequest {
 
 export interface MusicAdditionRequest {
   musicIds: string[]; // UUIDs das músicas a adicionar à playlist
+}
+
+export function normalizePlaylist(data: any): Playlist {
+  if (!data) return data;
+  const rawMusics = data.musics || data.musicas || [];
+  return {
+    ...data,
+    musics: rawMusics,
+    musicas: rawMusics,
+  };
 }
