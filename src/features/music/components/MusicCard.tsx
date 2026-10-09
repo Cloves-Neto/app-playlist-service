@@ -10,9 +10,15 @@ interface MusicCardProps {
   music: MusicResponse;
   onEdit: (music: MusicResponse) => void;
   onDelete: (music: MusicResponse) => void;
+  onAddToPlaylist?: (music: MusicResponse) => void;
 }
 
-export function MusicCard({ music, onEdit, onDelete }: MusicCardProps) {
+export function MusicCard({
+  music,
+  onEdit,
+  onDelete,
+  onAddToPlaylist,
+}: MusicCardProps) {
   return (
     <div className="group relative bg-card/60 hover:bg-card/90 border border-border/60 hover:border-border rounded-xl p-4 transition-all duration-200 hover:shadow-xs flex flex-col justify-between backdrop-blur-xs">
       <div>
@@ -36,6 +42,7 @@ export function MusicCard({ music, onEdit, onDelete }: MusicCardProps) {
             <MusicActionsMenu
               onEdit={() => onEdit(music)}
               onDelete={() => onDelete(music)}
+              onAddToPlaylist={onAddToPlaylist ? () => onAddToPlaylist(music) : undefined}
             />
           </div>
         </div>

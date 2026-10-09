@@ -6,12 +6,13 @@ import { Playlist } from "../types/playlist.types";
 import { usePlaylistByName } from "../hooks/usePlaylistByName";
 import { PlaylistDeleteDialog } from "./PlaylistDeleteDialog";
 import { RemoveTracksModal } from "./RemoveTracksModal";
+import { AddTracksToPlaylistModal } from "./AddTracksToPlaylistModal";
 import { MusicCard } from "@/features/music/components/MusicCard";
 import { MusicEditModal } from "@/features/music/components/MusicEditModal";
 import { MusicDeleteModal } from "@/features/music/components/MusicDeleteModal";
 import { MusicResponse } from "@/features/music/types/music.types";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Trash2, ListMinus, Folder, Disc, AlertCircle } from "lucide-react";
+import { ArrowLeft, Trash2, ListMinus, Folder, Disc, AlertCircle, Plus } from "lucide-react";
 
 interface PlaylistDetailViewProps {
   initialPlaylist?: Playlist;
@@ -29,6 +30,7 @@ export function PlaylistDetailView({
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isRemoveTracksOpen, setIsRemoveTracksOpen] = useState(false);
+  const [isAddTracksOpen, setIsAddTracksOpen] = useState(false);
   const [editingMusic, setEditingMusic] = useState<MusicResponse | null>(null);
   const [deletingMusic, setDeletingMusic] = useState<MusicResponse | null>(null);
 
@@ -106,7 +108,16 @@ export function PlaylistDetailView({
           </div>
 
           {/* Botões de Ação da Playlist */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center flex-wrap gap-2 shrink-0">
+            <Button
+              size="sm"
+              onClick={() => setIsAddTracksOpen(true)}
+              className="h-8 text-xs font-medium gap-1.5 shadow-xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Adicionar Músicas</span>
+            </Button>
+
             {tracks.length > 0 && (
               <Button
                 variant="outline"
@@ -151,6 +162,15 @@ export function PlaylistDetailView({
                 Este caderno ainda não possui músicas vinculadas.
               </p>
             </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setIsAddTracksOpen(true)}
+              className="text-xs gap-1.5 mt-2"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Adicionar Músicas a este Caderno</span>
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
@@ -171,6 +191,12 @@ export function PlaylistDetailView({
         playlistName={playlist.nome}
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
+      />
+
+      <AddTracksToPlaylistModal
+        playlist={playlist}
+        isOpen={isAddTracksOpen}
+        onClose={() => setIsAddTracksOpen(false)}
       />
 
       <RemoveTracksModal

@@ -15,7 +15,6 @@ import { useCreatePlaylist } from "../hooks/useCreatePlaylist";
 import { useMusics } from "@/features/music/hooks/useMusics";
 import { playlistSchema } from "../schemas/playlist.schema";
 import { Loader2, Music, Check } from "lucide-react";
-import { MusicResponse } from "@/features/music/types/music.types";
 
 interface PlaylistCreateModalProps {
   isOpen: boolean;
@@ -54,21 +53,11 @@ export function PlaylistCreateModal({ isOpen, onClose }: PlaylistCreateModalProp
 
     setErrors({});
 
-    const selectedMusicsPayload = (musics || [])
-      .filter((m) => selectedMusicIds.includes(m.id))
-      .map((m: MusicResponse) => ({
-        titulo: m.titulo,
-        artista: m.artista,
-        album: m.album,
-        ano: m.ano,
-        genero: m.genero,
-      }));
-
     createMutation.mutate(
       {
         nome: parseResult.data.nome,
         descricao: parseResult.data.descricao,
-        musicas: selectedMusicsPayload.length > 0 ? selectedMusicsPayload : undefined,
+        musicIds: selectedMusicIds.length > 0 ? selectedMusicIds : undefined,
       },
       {
         onSuccess: () => {

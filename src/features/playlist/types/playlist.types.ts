@@ -11,8 +11,13 @@ export interface PlaylistRequest {
   nome: string;
   descricao: string;
   musicas?: MusicRequest[];
+  musicIds?: string[];
 }
 
 export interface MusicRemovalRequest {
   musicIds: string[]; // UUIDs das músicas a remover da playlist
+}
+
+export interface MusicAdditionRequest {
+  musicIds: string[]; // UUIDs das músicas a adicionar à playlist
 }

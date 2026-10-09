@@ -6,6 +6,7 @@ import { MusicResponse } from "../types/music.types";
 import { MusicCard } from "./MusicCard";
 import { MusicEditModal } from "./MusicEditModal";
 import { MusicDeleteModal } from "./MusicDeleteModal";
+import { AddToPlaylistModal } from "@/features/playlist/components/AddToPlaylistModal";
 import { useWorkspaceStore } from "@/stores/workspace.store";
 import { Button } from "@/components/ui/button";
 import { Music2, SearchX, AlertCircle, RefreshCw } from "lucide-react";
@@ -16,6 +17,7 @@ export function MusicFeed() {
 
   const [editingMusic, setEditingMusic] = useState<MusicResponse | null>(null);
   const [deletingMusic, setDeletingMusic] = useState<MusicResponse | null>(null);
+  const [playlistTargetMusic, setPlaylistTargetMusic] = useState<MusicResponse | null>(null);
 
   return (
     <div className="space-y-4">
@@ -136,6 +138,7 @@ export function MusicFeed() {
               music={music}
               onEdit={setEditingMusic}
               onDelete={setDeletingMusic}
+              onAddToPlaylist={setPlaylistTargetMusic}
             />
           ))}
         </div>
@@ -155,6 +158,12 @@ export function MusicFeed() {
         music={deletingMusic}
         isOpen={!!deletingMusic}
         onClose={() => setDeletingMusic(null)}
+      />
+
+      <AddToPlaylistModal
+        music={playlistTargetMusic}
+        isOpen={!!playlistTargetMusic}
+        onClose={() => setPlaylistTargetMusic(null)}
       />
     </div>
   );
